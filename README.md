@@ -1,5 +1,5 @@
 # 4320-Final-Project
-Amyia Gates
-Caleb White
-Gage Smith
+Amyia Gates, 
+Caleb White, 
+Gage Smith, 
 Spencer Hunt
