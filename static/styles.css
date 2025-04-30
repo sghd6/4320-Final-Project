@@ -1,0 +1,33 @@
+body {
+    background-color: #1d7eec;
+    text-align: center;  
+}
+
+h1 {
+  padding: 10px;
+  color: black;
+}
+
+a.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  text-align: center;
+  margin: 5px;
+}
+
+a.btn:hover {
+  background-color: #0056b3;
+}
+
+.panel {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #519fec;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
