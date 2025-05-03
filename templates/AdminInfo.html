@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/Admin.css">
+    
+</head>
+<body>
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li><a href="{{ url_for('admin') }}">Admin Login</a></li>
+    <li><a href="{{ url_for('reserved') }}">Reserve A Seat</a></li>
+    <br><br><br>
+    
+    <div class="panel">
+        <h1>Admin Information</h1>
+
+        <h1>Reservation List</h1>
+    <table border="1">
+        <tr>
+            <th>Passenger Name</th>
+            <th>Seat Row</th>
+            <th>Seat Column</th>
+            <th>eTicket Number</th>
+            <th>delete?</th>
+        </tr>
+        {% for res in reservations %}
+        <tr>
+            <td>{{ res.passengerName }}</td>
+            <td>{{ res.seatRow }}</td>
+            <td>{{ res.seatColumn }}</td>
+            <td>{{ res.eTicketNumber }}</td>
+            <td> 
+                <form action="{{ url_for('delete_reservation', reservation_id=res.id) }}" method="post" onsubmit="return;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+</body>
+</html>

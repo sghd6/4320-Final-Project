@@ -7,11 +7,35 @@
     <link rel="stylesheet" href="/static/ReservedSeat.css">
 </head>
 <body>
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li><a href="{{ url_for('admin') }}">Admin Login</a></li>
+    <li><a href="{{ url_for('reserved') }}">Reserve A Seat</a></li>
+
+    <br><br><br>
+    
     <div class="panel">
         <h1>Reserve Your Seat</h1>
 
-        <input type="text" name="name" placeholder="Your Name" required>
-        <button type="submit">Submit Reservation</button>
+        <h2>Seat Reservation Form</h2>
+
+        {% if error %}
+        <p>{{ error }}</p>
+        {% endif %}
+    <form action="{{ url_for('add_reservation') }}" method="post">
+        <label for="first-name">First Name:</label><br>
+        <input type="text" id="first-name" name="firstName" required><br><br>
+        
+        <label for="last-name">Last Name:</label><br>
+        <input type="text" id="last-name" name="lastName" required><br><br>
+
+        <label for="seat-row">Seat Row:</label><br>
+        <input type="number" id="seat-row" name="seatRow" required><br><br>
+
+        <label for="seat-column">Seat Column:</label><br>
+        <input type="number" id="seat-column" name="seatColumn" required><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
     </div>
 </body>
 </html>
