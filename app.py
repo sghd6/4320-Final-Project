@@ -32,7 +32,7 @@ def home():
     return render_template('index.html')
 
 @app.route('/adminInfo')
-def admin_info():
+def adminInfo():
     reservations = Reserved.query.all()
     return render_template('adminInfo.html', reservations=reservations)
 
@@ -41,7 +41,7 @@ def delete_reservation(reservation_id):
     reservation = Reserved.query.get_or_404(reservation_id)
     db.session.delete(reservation)
     db.session.commit()
-    return redirect(url_for('admin_info'))
+    return redirect(url_for('adminInfo'))
 
 @app.route('/test_db')
 def test_db():
@@ -68,7 +68,7 @@ def admin_login():
     admin = Admin.query.filter_by(username=username).first()
     if admin and admin.password == password:
         session['admin_logged_in'] = True
-        return redirect(url_for('admin_info'))
+        return redirect(url_for('adminInfo'))
     else:
         return redirect(url_for('home'))
 
@@ -90,11 +90,9 @@ def add_reservation():
     new_res = Reserved(
         
             passengerName = passengerName,
-
             seatRow=seatRow,
             seatColumn=seatColumn,
-
-            eTicketNumber = f"{firstName[:2].upper()}{lastName[:2].upper()}{seatRow}{seatColumn}"
+            eTicketNumber = f"{firstName}{seatRow}{seatColumn}"
 
         )
 
