@@ -67,10 +67,10 @@ def admin_login():
 
     admin = Admin.query.filter_by(username=username).first()
     if admin and admin.password == password:
-        session['admin_logged_in'] = True
         return redirect(url_for('adminInfo'))
     else:
-        return redirect(url_for('home'))
+        incorrectInfo = "Incorrect Admin log in credentials"
+        return render_template('Admin.html', message = incorrectInfo)
 
 @app.route('/add_reservation', methods=['POST'])
 def add_reservation():
@@ -83,7 +83,11 @@ def add_reservation():
     existing_res = Reserved.query.filter_by(seatRow=seatRow, seatColumn=seatColumn).first()
     if existing_res:
         taken = "Seat has already been taken, please choose another"
-        return render_template('ReservedSeat.html', error = taken)
+        return render_template('ReservedSeat.html', message = taken)
+    
+    if seatRow < 0 or seatRow > 12 or seatColumn < 0 or seatColumn > 4:
+        noExs = "Seat does not exist, please choose another"
+        return render_template('ReservedSeat.html', message = noExs)
 
     passengerName = f"{firstName} {lastName}"
 
@@ -95,11 +99,11 @@ def add_reservation():
             eTicketNumber = f"{firstName}{seatRow}{seatColumn}"
 
         )
-
+    thanks = f"Your reservation has been taken, {firstName}"
     db.session.add(new_res)
     db.session.commit()
 
-    return redirect(url_for('reserved'))
+    return render_template('ReservedSeat.html', message = thanks)
 
 if __name__ == '__main__':
    # with app.app_context():

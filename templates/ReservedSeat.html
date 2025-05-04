@@ -12,14 +12,14 @@
     <li><a href="{{ url_for('reserved') }}">Reserve A Seat</a></li>
 
     <br><br><br>
-    
+
     <div class="panel">
         <h1>Reserve Your Seat</h1>
 
         <h2>Seat Reservation Form</h2>
 
-        {% if error %}
-        <p>{{ error }}</p>
+        {% if message %}
+        <p>{{ message }}</p>
         {% endif %}
     <form action="{{ url_for('add_reservation') }}" method="post">
         <label for="first-name">First Name:</label><br>
