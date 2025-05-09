@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/AdminInfo.css">
+</head>
+<body>
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li><a href="{{ url_for('admin') }}">Admin Login</a></li>
+    <li><a href="{{ url_for('reserved') }}">Reserve A Seat</a></li>
+    
+    <br><br><br>
+
+    <div class="panel">
+        <h1>Admin Information</h1>
+
+        <div class="sales-summary">
+            <h2>Sales Summary</h2>
+            <p>Total Sales: <strong>${{ total_sales }}</strong></p>
+            <p>Total Reservations: <strong>{{ reservations|length }}</strong></p>
+        </div>
+
+        <h2>Seating Chart</h2>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #b3ffb3;"></div>
+                <span>Available</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #ffb3b3;"></div>
+                <span>Taken</span>
+            </div>
+        </div>
+
+        <table class="seat-chart">
+            <tr>
+                <th></th>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>D</th>
+            </tr>
+            {% for row in range(12) %}
+            <tr>
+                <th>{{ row + 1 }}</th>
+                {% for col in range(4) %}
+                    {% if seating_chart[row][col] %}
+                        <td class="seat-taken" title="{{ seating_chart[row][col] }}">
+                            <span>X</span>
+                            <span class="price-tag">${{ cost_matrix[row][col] }}</span>
+                        </td>
+                    {% else %}
+                        <td class="seat-available">
+                            <span>-</span>
+                            <span class="price-tag">${{ cost_matrix[row][col] }}</span>
+                        </td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Reservation List</h2>
+        <table class="reservation-table">
+            <tr>
+                <th>Passenger Name</th>
+                <th>Seat Row</th>
+                <th>Seat Column</th>
+                <th>eTicket Number</th>
+                <th>Created Date</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            {% for res in reservations %}
+            <tr>
+                <td>{{ res.passengerName }}</td>
+                <td>{{ res.seatRow }}</td>
+                <td>{{ res.seatColumn }}</td>
+                <td>{{ res.eTicketNumber }}</td>
+                <td>{{ res.created.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>${{ cost_matrix[res.seatRow-1][res.seatColumn-1] }}</td>
+                <td> 
+                    <form action="{{ url_for('delete_reservation', reservation_id=res.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

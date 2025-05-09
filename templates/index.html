@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li><a href="{{ url_for('admin') }}">Admin Login</a></li>
+    <li><a href="{{ url_for('reserved') }}">Reserve A Seat</a></li>
+    <br><br><br>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation System</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="panel">
+        <h1>Reserve Your Seat</h1>
+
+        <a href="{{ url_for('reserved') }}" class="btn" id="reserveSeat">Reserve a seat</a>
+        <a href="{{ url_for('admin') }}" class="btn" id="loginAsAdmin">Login as Admin</a>
+    </div>
+</body>
+</html>
