@@ -1,31 +1,150 @@
 body {
     background-color: #1d7eec;
-    text-align: center;  
+    text-align: center;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 h1 {
-  padding: 10px;
-  color: black;
+    padding: 10px;
+    color: black;
+    font-size: 28px;
+    margin-bottom: 20px;
 }
 
-.panel {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #519fec;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+.navbar {
+    background-color: #1d7eec;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
 
-  li {
+.navbar a {
     float: left;
-  }
-  
-  li a {
-    display: block;
     color: white;
     text-align: center;
     padding: 14px 16px;
-   
-    font-size: 25px;
-  }
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #519fec;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.message, .confirmation {
+    background-color: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.confirmation {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.seating-chart {
+    margin-bottom: 30px;
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.seat-available {
+    width: 20px;
+    height: 20px;
+    background-color: #a8d5ff;
+    margin-right: 5px;
+}
+
+.seat-taken {
+    width: 20px;
+    height: 20px;
+    background-color: #ff9999;
+    margin-right: 5px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.seat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.available {
+    background-color: #a8d5ff;
+}
+
+.taken {
+    background-color: #ff9999;
+}
+
+.reservation-form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}

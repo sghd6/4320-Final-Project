@@ -1,14 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for #, session --> never used
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text  # Correct import here
+from sqlalchemy import text
 from datetime import datetime
 import os
-
+import random
+import string
 
 
 app = Flask(__name__)
 app.secret_key = '2a34ds5f6yuisfjahsgy6tf'
-app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///C:\Users\caleb\OneDrive\Documents\GitHub\4320-Final-Project\reservations.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///reservations.db' # idrk if we need it at the root level too, to scared to delete it
 db = SQLAlchemy(app)
 
 class Admin(db.Model):
@@ -27,14 +28,66 @@ class Reserved(db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+def get_cost_matrix():
+    cost_matrix = [[100, 75, 50, 100] for row in range(12)]
+    return cost_matrix
+
+
+def calculate_total_sales():
+    reservations = Reserved.query.all()
+    cost_matrix = get_cost_matrix()
+    total_sales = 0
+    
+    for res in reservations:
+        row_idx = res.seatRow - 1
+        col_idx = res.seatColumn - 1
+        
+        if 0 <= row_idx < 12 and 0 <= col_idx < 4:
+            total_sales += cost_matrix[row_idx][col_idx]
+    
+    return total_sales
+
+
+def generate_seating_chart():
+    seating_chart = [[None for _ in range(4)] for _ in range(12)]
+    
+    reservations = Reserved.query.all()
+    for res in reservations:
+        row_idx = res.seatRow - 1 
+        col_idx = res.seatColumn - 1
+        
+        if 0 <= row_idx < 12 and 0 <= col_idx < 4:
+            seating_chart[row_idx][col_idx] = res.passengerName
+    
+    return seating_chart
+
+
+def generate_reservation_code(first_name, last_name):
+    random_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    code = f"{first_name[0]}{last_name[0]}{random_part}"
+    return code
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
 @app.route('/adminInfo')
 def adminInfo():
     reservations = Reserved.query.all()
-    return render_template('adminInfo.html', reservations=reservations)
+    seating_chart = generate_seating_chart()
+    total_sales = calculate_total_sales()
+    cost_matrix = get_cost_matrix()
+    
+    return render_template(
+        'adminInfo.html', 
+        reservations=reservations, 
+        seating_chart=seating_chart,
+        total_sales=total_sales,
+        cost_matrix=cost_matrix
+    )
+
 
 @app.route('/delete_reservation/<int:reservation_id>', methods=['POST'])
 def delete_reservation(reservation_id):
@@ -43,22 +96,17 @@ def delete_reservation(reservation_id):
     db.session.commit()
     return redirect(url_for('adminInfo'))
 
-@app.route('/test_db')
-def test_db():
-    try:
-        db_path = os.path.abspath('reservations.db')
-        result = db.session.execute(text('SELECT * FROM admins')).fetchall()
-        return f"Database path: {db_path}<br>Found {len(result)} admin(s): {result}"
-    except Exception as e:
-        return f"Database connection failed: {e}"
-
 @app.route('/reserved')
 def reserved():
-    return render_template('ReservedSeat.html')
+    seating_chart = generate_seating_chart()
+    cost_matrix = get_cost_matrix()
+    return render_template('ReservedSeat.html', seating_chart=seating_chart, cost_matrix=cost_matrix)
+
 
 @app.route('/admin')
 def admin():
     return render_template('Admin.html')
+
 
 @app.route('/admin_login', methods=['POST'])
 def admin_login():
@@ -83,29 +131,46 @@ def add_reservation():
     existing_res = Reserved.query.filter_by(seatRow=seatRow, seatColumn=seatColumn).first()
     if existing_res:
         taken = "Seat has already been taken, please choose another"
-        return render_template('ReservedSeat.html', message = taken)
+        seating_chart = generate_seating_chart()
+        cost_matrix = get_cost_matrix()
+        return render_template('ReservedSeat.html', message=taken, seating_chart=seating_chart, cost_matrix=cost_matrix)
     
-    if seatRow < 0 or seatRow > 12 or seatColumn < 0 or seatColumn > 4:
+    if seatRow < 1 or seatRow > 12 or seatColumn < 1 or seatColumn > 4:
         noExs = "Seat does not exist, please choose another"
-        return render_template('ReservedSeat.html', message = noExs)
+        seating_chart = generate_seating_chart()
+        cost_matrix = get_cost_matrix()
+        return render_template('ReservedSeat.html', message=noExs, seating_chart=seating_chart, cost_matrix=cost_matrix)
 
     passengerName = f"{firstName} {lastName}"
+    eTicket = generate_reservation_code(firstName, lastName)
 
     new_res = Reserved(
-        
-            passengerName = passengerName,
-            seatRow=seatRow,
-            seatColumn=seatColumn,
-            eTicketNumber = f"{firstName}{seatRow}{seatColumn}"
-
-        )
-    thanks = f"Your reservation has been taken, {firstName}"
+        passengerName=passengerName,
+        seatRow=seatRow,
+        seatColumn=seatColumn,
+        eTicketNumber=eTicket
+    )
+    
     db.session.add(new_res)
     db.session.commit()
 
-    return render_template('ReservedSeat.html', message = thanks)
+    cost_matrix = get_cost_matrix()
+    seat_price = cost_matrix[seatRow-1][seatColumn-1]
+    
+    thanks = f"Thank you for your reservation, {firstName}! Your e-ticket number is {eTicket}."
+    confirmation = f"You've reserved seat Row {seatRow}, Column {seatColumn} for ${seat_price}."
+    
+    seating_chart = generate_seating_chart()
+    
+    return render_template('ReservedSeat.html', 
+                           message=thanks, 
+                           confirmation=confirmation,
+                           eTicket=eTicket,
+                           seating_chart=seating_chart,
+                           cost_matrix=cost_matrix)
+
 
 if __name__ == '__main__':
-   # with app.app_context():
-   #     db.create_all()
+    #with app.app_context():
+       # db.create_all() # not making a new db every time
     app.run(debug=True)
