@@ -20,26 +20,26 @@ Create a menu-driven reservation system using Flask Python, or another language 
 
 Your application will need to have the following functionality:
 
-- A. Create a seating chart and load the initial reservations  
+- ~~A. Create a seating chart and load the initial reservations~~
 - ~~B. Display the main menu that asks the user whether they want to reserve a seat or log in as an administrator~~  
 - ~~C. If the user selects the admin login option they are taken to a page with a form to login. Information the user provides:~~  
   - ~~admin username~~  
   - ~~admin password~~  
-- D. If the user successfully logs in, the following should content should then be displayed on the admin page:  
-  - A seating chart is displayed  
-  - The total sales collected  
-  - A list of reservations made and a button to delete each reservation  
-- E. If the user selects the reservation option they are taken to a page with a form to reserve a seat. Information the user provides:  
-  - first name  
-  - last name  
-  - seat row  
-  - seat column  
-- F. Display a flight chart  
-- G. Calculate and get the total sales for the flight when the user successfully logs in as an admin  
-- H. Create and print a reservation code for the user when the user successfully makes a reservation  
-- I. Insert the reservation into the reservations table in the reservations SQLite database  
-- J. Each page should have a link to the main option page  
-- You also must use SQL Alchemy for your database operations or another Object Relational Mapper (ORM)  
+- ~~D. If the user successfully logs in, the following should content should then be displayed on the admin page:~~
+  - ~~A seating chart is displayed~~
+  - ~~The total sales collected~~
+  - ~~A list of reservations made and a button to delete each reservation~~  
+- E. ~~If the user selects the reservation option they are taken to a page with a form to reserve a seat. Information the user provides:~~  
+  - ~~first name~~  
+  - ~~last name~~  
+  - ~~seat row~~  
+  - ~~seat column~~  
+- F. ~~Display a flight chart~~  
+- G. ~~Calculate and get the total sales for the flight when the user successfully logs in as an admin~~  
+- H. ~~Create and print a reservation code for the user when the user successfully makes a reservation~~  
+- I. ~~Insert the reservation into the reservations table in the reservations SQLite database~~  
+- J. ~~Each page should have a link to the main option page~~ 
+- ~~You also must use SQL Alchemy for your database operations or another Object Relational Mapper (ORM)~~  
 
 **Cost Matrix**: Use the following function to generate the pricing matrix:
 ```
